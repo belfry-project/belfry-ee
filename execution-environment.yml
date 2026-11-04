@@ -2,13 +2,13 @@
 version: 3
 images:
   base_image:
-    name: quay.io/centos/centos:stream9
+    name: quay.io/centos/centos:stream10
 dependencies:
   python_interpreter:
-    package_system: python3.12
-    python_path: /usr/bin/python3.12
+    package_system: python3.14
+    python_path: /usr/bin/python3.14
   ansible_core:
-    package_pip: ansible-core<2.19
+    package_pip: ansible-core>=2.22,<2.23
   ansible_runner:
     package_pip: ansible-runner
   galaxy: |
@@ -30,7 +30,7 @@ dependencies:
       - name: kubevirt.core
   system: |
     git-core [platform:rpm]
-    python3.12-devel [platform:rpm compile]
+    python3.14-devel [platform:rpm compile]
     libcurl-devel [platform:rpm compile]
     krb5-devel [platform:rpm compile]
     krb5-workstation [platform:rpm]
@@ -69,5 +69,5 @@ additional_build_steps:
     - COPY --from=quay.io/ansible/receptor:v1.6.9@sha256:555994b7469304a7ea0d0eabe1841e374090047cf7f4c43af0c653e1405431c4 /usr/bin/receptor /usr/bin/receptor
     - RUN mkdir -p /var/run/receptor
     - RUN git lfs install --system
-    # SymLink `python` -> `python3.12`
-    - RUN alternatives --install /usr/bin/python python /usr/bin/python3.12 312
+    # SymLink `python` -> `python3.14`
+    - RUN alternatives --install /usr/bin/python python /usr/bin/python3.14 314
