@@ -58,7 +58,7 @@ jobs:
           if [ "$EVENT" = "release" ]; then
             echo "tags=--tag=${IMAGE}:${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
           else
-            echo "tags=--tag=${IMAGE}:latest --tag=${IMAGE}:main-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+            echo "tags=--tag=${IMAGE}:main --tag=${IMAGE}:main-${GITHUB_SHA::7} --tag=${IMAGE}:latest" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Build and push image
