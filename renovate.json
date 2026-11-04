@@ -1,4 +1,26 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>belfry-project/.github"]
+  "extends": ["github>belfry-project/.github"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Receptor image copied into the execution environment",
+      "managerFilePatterns": ["/^execution-environment\\.yml$/"],
+      "matchStrings": [
+        "(?<depName>quay\\.io/ansible/receptor):(?<currentValue>v[0-9.]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "ansible-sign pinned to a commit on its main branch",
+      "managerFilePatterns": ["/^execution-environment\\.yml$/"],
+      "matchStrings": [
+        "git\\+(?<packageName>https://github\\.com/ansible/ansible-sign)@(?<currentDigest>[a-f0-9]{40})"
+      ],
+      "depNameTemplate": "ansible-sign",
+      "currentValueTemplate": "main",
+      "datasourceTemplate": "git-refs"
+    }
+  ]
 }
