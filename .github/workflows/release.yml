@@ -21,7 +21,6 @@ on:
   release:
     types: [published]
   push:
-    branches: [release-workflow]  # TEMPORARY for testing, remove before merging
   workflow_dispatch:
     inputs:
       version:
@@ -173,7 +172,7 @@ jobs:
       packages: write
       id-token: write
       attestations: write
-    uses: belfry-project/.github/.github/workflows/release-image.yml@release-procedure
+    uses: belfry-project/.github/.github/workflows/release-image.yml@main
     with:
       image: ghcr.io/belfry-project/belfry-ee
       version: ${{ needs.setup.outputs.version }}
