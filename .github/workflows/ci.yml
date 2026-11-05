@@ -32,6 +32,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     name: Docker
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
@@ -49,3 +52,15 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |
           tox -e docker
+
+      # Pull requests from this repository publish their build as :pr-<number>
+      # (amd64 only), so belfry CI can test it with its ee_image input.
+      - name: Publish pull request image
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          IMAGE: ghcr.io/${{ github.repository_owner }}/belfry-ee
+          TAG: pr-${{ github.event.pull_request.number }}
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker tag "${IMAGE}:latest" "${IMAGE}:${TAG}"
+          docker push "${IMAGE}:${TAG}"
