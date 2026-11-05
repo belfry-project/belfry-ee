@@ -20,7 +20,6 @@ name: Release
 on:
   release:
     types: [published]
-  push:
   workflow_dispatch:
     inputs:
       version:
