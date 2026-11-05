@@ -11,7 +11,7 @@
         "/^execution-environment\\.yml$/"
       ],
       "matchStrings": [
-        "(?<depName>quay\\.io/ansible/receptor):(?<currentValue>v[0-9.]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+        "(?<depName>ghcr\\.io/belfry-project/receptor):(?<currentValue>v[0-9.]+-belfry\\.[0-9]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
       ],
       "datasourceTemplate": "docker"
     },
@@ -39,6 +39,15 @@
       ],
       "datasourceTemplate": "docker",
       "autoReplaceStringTemplate": "name: {{depName}}:{{newValue}}{{#if newDigest}}@{{newDigest}}{{/if}}\n"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Belfry's receptor rebuild is tagged <upstream version>-belfry.<n>",
+      "matchPackageNames": [
+        "ghcr.io/belfry-project/receptor"
+      ],
+      "versioning": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-belfry\\.(?<build>\\d+)$"
     }
   ]
 }

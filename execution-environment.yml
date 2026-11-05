@@ -67,7 +67,7 @@ additional_build_steps:
   append_base:
     - RUN $PYCMD -m pip install -U pip
   append_final:
-    - COPY --from=quay.io/ansible/receptor:v1.6.9@sha256:555994b7469304a7ea0d0eabe1841e374090047cf7f4c43af0c653e1405431c4 /usr/bin/receptor /usr/bin/receptor
+    - COPY --from=ghcr.io/belfry-project/receptor:v1.6.9-belfry.1@sha256:da242ce78920b2fb16af19499175f4f73aff75979b8983314da3aff5cffdb9ed /usr/bin/receptor /usr/bin/receptor
     - RUN mkdir -p /var/run/receptor
     - RUN git lfs install --system
     # SymLink `python` -> `python3.14`
