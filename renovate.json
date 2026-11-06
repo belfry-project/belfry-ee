@@ -35,7 +35,7 @@
         "/^execution-environment\\.yml$/"
       ],
       "matchStrings": [
-        "name: (?<depName>quay\\.io/centos/centos):(?<currentValue>stream\\d+)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?\\n"
+        "name: (?<depName>quay\\.io/almalinuxorg/almalinux):(?<currentValue>\\d+)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?\\n"
       ],
       "datasourceTemplate": "docker",
       "autoReplaceStringTemplate": "name: {{depName}}:{{newValue}}{{#if newDigest}}@{{newDigest}}{{/if}}\n"
