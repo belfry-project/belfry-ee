@@ -82,7 +82,9 @@ dependencies:
 additional_build_steps:
   prepend_base:
     # The AlmaLinux base image can lag behind its security updates; install them
-    - RUN dnf -y upgrade --refresh && dnf clean all
+    # AlmaLinux's mirror list sometimes hands out a mirror with broken metadata,
+    # and dnf does not fall back to another mirror then: retry the refresh
+    - RUN for i in 1 2 3 4 5; do dnf -y makecache --refresh && break; dnf clean all; sleep 15; done && dnf -y upgrade && dnf clean all
   append_base:
     - RUN $PYCMD -m pip install -U pip
   append_final:
