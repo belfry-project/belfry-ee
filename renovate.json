@@ -62,6 +62,18 @@
       ],
       "datasourceTemplate": "github-releases",
       "autoReplaceStringTemplate": "https://github.com/{{depName}}/releases/download/{{newValue}}/awxkit-{{newValue}}-py3-none-any.whl"
+    },
+    {
+      "customType": "regex",
+      "description": "Belfry's awx.awx collection from the latest Belfry release",
+      "managerFilePatterns": [
+        "/^execution-environment\\.yml$/"
+      ],
+      "matchStrings": [
+        "https://github\\.com/(?<depName>belfry-project/belfry)/releases/download/(?<currentValue>[^/\\s]+)/awx-awx-[^\\s]+\\.tar\\.gz"
+      ],
+      "datasourceTemplate": "github-releases",
+      "autoReplaceStringTemplate": "https://github.com/{{depName}}/releases/download/{{newValue}}/awx-awx-{{newValue}}.tar.gz"
     }
   ],
   "packageRules": [
@@ -71,6 +83,16 @@
         "ghcr.io/belfry-project/receptor"
       ],
       "versioning": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-belfry\\.(?<build>\\d+)$"
+    },
+    {
+      "description": "awxkit and the awx.awx collection come from the same Belfry release; update them together",
+      "matchDatasources": [
+        "github-releases"
+      ],
+      "matchPackageNames": [
+        "belfry-project/belfry"
+      ],
+      "groupName": "Belfry release (awxkit and awx.awx)"
     }
   ]
 }
