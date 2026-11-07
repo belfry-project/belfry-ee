@@ -15,8 +15,10 @@ dependencies:
     ---
     # Exact versions, updated by Renovate (galaxy-collection datasource)
     collections:
-      - name: awx.awx
-        version: "24.6.1"
+      # Belfry's awx.awx collection from the latest Belfry release (like awxkit
+      # below), not upstream's 24.6.1 from Galaxy
+      - name: https://github.com/belfry-project/belfry/releases/download/1.1.0/awx-awx-1.1.0.tar.gz
+        type: url
       - name: azure.azcollection
         version: "4.2.0"
       - name: amazon.aws
