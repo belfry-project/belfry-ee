@@ -39,6 +39,29 @@
       ],
       "datasourceTemplate": "docker",
       "autoReplaceStringTemplate": "name: {{depName}}:{{newValue}}{{#if newDigest}}@{{newDigest}}{{/if}}\n"
+    },
+    {
+      "customType": "regex",
+      "description": "Galaxy collections in the execution environment, pinned to exact versions",
+      "managerFilePatterns": [
+        "/^execution-environment\\.yml$/"
+      ],
+      "matchStrings": [
+        "- name: (?<depName>[a-z0-9_]+\\.[a-z0-9_]+)\\n\\s+version: \"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "galaxy-collection"
+    },
+    {
+      "customType": "regex",
+      "description": "awxkit from the latest Belfry release",
+      "managerFilePatterns": [
+        "/^execution-environment\\.yml$/"
+      ],
+      "matchStrings": [
+        "https://github\\.com/(?<depName>belfry-project/belfry)/releases/download/(?<currentValue>[^/\\s]+)/awxkit-[^\\s]+\\.whl"
+      ],
+      "datasourceTemplate": "github-releases",
+      "autoReplaceStringTemplate": "https://github.com/{{depName}}/releases/download/{{newValue}}/awxkit-{{newValue}}-py3-none-any.whl"
     }
   ],
   "packageRules": [
