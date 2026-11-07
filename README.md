@@ -15,3 +15,7 @@ Then run the following command from the root of this repo:
 ```bash
 $ ansible-builder build -v3 -t ghcr.io/belfry-project/belfry-ee # --container-runtime=docker # Is podman by default
 ```
+
+## Pinned inputs
+
+`execution-environment.yml` pins its inputs so that a build is reproducible: the AlmaLinux base image by digest (a `dnf -y upgrade --refresh` step still adds the security updates published after it), the Galaxy collections to exact versions, and awxkit to the wheel of the latest Belfry release. Renovate (`renovate.json`) proposes updates for all of them.
