@@ -84,7 +84,11 @@ additional_build_steps:
     # The AlmaLinux base image can lag behind its security updates; install them
     # AlmaLinux's mirror list sometimes hands out a mirror with broken metadata,
     # and dnf does not fall back to another mirror then: retry the refresh
-    - RUN for i in 1 2 3 4 5; do dnf -y makecache --refresh && break; dnf clean all; sleep 15; done && dnf -y upgrade && dnf clean all
+    # after two failed attempts, use repo.almalinux.org instead of the mirror list
+    - >-
+      RUN for i in 1 2 3 4 5; do dnf -y makecache --refresh && break;
+      if [ $i -eq 2 ]; then sed -i '/^mirrorlist=/{N;s|^mirrorlist=\([^\n]*\)\n# baseurl=\(https://repo\.almalinux\.org[^\n]*\)|#mirrorlist=\1\nbaseurl=\2|}' /etc/yum.repos.d/almalinux-*.repo; fi;
+      dnf clean all; sleep 15; done && dnf -y upgrade && dnf clean all
   append_base:
     - RUN $PYCMD -m pip install -U pip
   append_final:
