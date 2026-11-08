@@ -1,5 +1,9 @@
 ---
 version: 3
+build_arg_defaults:
+  # Downloads from GitHub release assets (the awx.awx collection) can be slow;
+  # ansible-galaxy's default 60 s read timeout is too short then
+  ANSIBLE_GALAXY_CLI_COLLECTION_OPTS: "--timeout 300"
 images:
   base_image:
     name: quay.io/almalinuxorg/almalinux:10@sha256:96336c2e1a61ba389a943ca68069ea803ccfabe12c4461a6e869496ddc9cad8e
