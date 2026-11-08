@@ -1,9 +1,5 @@
 ---
 version: 3
-build_arg_defaults:
-  # Downloads from GitHub release assets (the awx.awx collection) can be slow;
-  # ansible-galaxy's default 60 s read timeout is too short then
-  ANSIBLE_GALAXY_CLI_COLLECTION_OPTS: "--timeout 300"
 images:
   base_image:
     name: quay.io/almalinuxorg/almalinux:10@sha256:96336c2e1a61ba389a943ca68069ea803ccfabe12c4461a6e869496ddc9cad8e
@@ -19,10 +15,6 @@ dependencies:
     ---
     # Exact versions, updated by Renovate (galaxy-collection datasource)
     collections:
-      # Belfry's awx.awx collection from the latest Belfry release (like awxkit
-      # below), not upstream's 24.6.1 from Galaxy
-      - name: https://github.com/belfry-project/belfry/releases/download/1.2.0/awx-awx-1.2.0.tar.gz
-        type: url
       - name: azure.azcollection
         version: "4.2.0"
       - name: amazon.aws
@@ -96,6 +88,15 @@ additional_build_steps:
   append_base:
     - RUN $PYCMD -m pip install -U pip
   append_final:
+    # Belfry's awx.awx collection from the latest Belfry release (like awxkit),
+    # not upstream's 24.6.1 from Galaxy. Downloaded with curl and retries:
+    # ansible-galaxy gives URL downloads a fixed 60 s timeout and no retries,
+    # too little when GitHub's release downloads are slow
+    - >-
+      RUN curl -fsSL --retry 5 --retry-all-errors --retry-delay 10 --connect-timeout 30 --max-time 300
+      -o /tmp/awx-awx.tar.gz https://github.com/belfry-project/belfry/releases/download/1.2.0/awx-awx-1.2.0.tar.gz
+      && ansible-galaxy collection install /tmp/awx-awx.tar.gz --collections-path /usr/share/ansible/collections
+      && rm -f /tmp/awx-awx.tar.gz
     - COPY --from=ghcr.io/belfry-project/receptor:v1.6.9-belfry.1@sha256:da242ce78920b2fb16af19499175f4f73aff75979b8983314da3aff5cffdb9ed /usr/bin/receptor /usr/bin/receptor
     - RUN mkdir -p /var/run/receptor
     - RUN git lfs install --system
